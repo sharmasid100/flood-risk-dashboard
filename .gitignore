@@ -1,0 +1,36 @@
+# Python virtual environment
+venv/
+.venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Environment variables
+.env
+.env.*
+
+# Keep the example
+!.env.example
+
+# Node
+node_modules/
+frontend/dist/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# SAM build artifacts
+.aws-sam/
+
+# Python tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
