@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: DrainMind synthetic flood-risk demo API
+
+Globals:
+  Function:
+    Timeout: 20
+    MemorySize: 512
+    Runtime: python3.12
+    Environment:
+      Variables:
+        SIMULATION_TABLE: !Ref SimulationTable
+        SNS_TOPIC_ARN: !Ref FloodAlertTopic
+        ALERT_MODE: local_demo
+        CORS_ORIGINS: http://localhost:5173
+
+Resources:
+  DrainMindApi:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: app.main.handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref SimulationTable
+        - SNSPublishMessagePolicy:
+            TopicName: !GetAtt FloodAlertTopic.TopicName
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+
+  SimulationTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: simulation_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: simulation_id
+          KeyType: HASH
+      TimeToLiveSpecification:
+        AttributeName: expires_at
+        Enabled: true
+
+  FloodAlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: DrainMind flood demo alerts
+
+Outputs:
+  ApiUrl:
+    Description: API Gateway base URL; set this as VITE_API_URL in Amplify.
+    Value: !Sub https://${ServerlessRestApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/Prod/
+  SimulationTableName:
+    Value: !Ref SimulationTable
+  FloodAlertTopicArn:
+    Value: !Ref FloodAlertTopic
