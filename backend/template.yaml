@@ -12,7 +12,7 @@ Globals:
         SIMULATION_TABLE: !Ref SimulationTable
         SNS_TOPIC_ARN: !Ref FloodAlertTopic
         ALERT_MODE: local_demo
-        CORS_ORIGINS: http://localhost:5173
+        CORS_ORIGINS: "http://localhost:5173,http://127.0.0.1:5173,https://main.d2w9g6yrzlunpc.amplifyapp.com"
 
 Resources:
   DrainMindApi:
