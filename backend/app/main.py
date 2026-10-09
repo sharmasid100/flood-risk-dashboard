@@ -13,7 +13,13 @@ from .demo_data import CITY_NAME, DATA_LABEL, generate_areas
 from .engine import Intervention, MLFloodPredictor, RuleBasedFloodPredictor, recommend, simulate_intervention, snapshot_dict
 
 
-app = FastAPI(title="DrainMind API", version="1.0.0", description="Flood-risk MVP using explicitly synthetic demonstration data.")
+app = FastAPI(
+    title="DrainMind API",
+    version="1.0.0",
+    description="Flood-risk MVP using explicitly synthetic demonstration data.",
+    root_path="/Prod"
+)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=os.getenv("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(","),
