@@ -1,4 +1,7 @@
-const API_BASE = (import.meta.env.VITE_API_URL ?? 'http://localhost:8000').replace(/\/+$/, '')
+const API_URL = import.meta.env.VITE_API_URL
+if (!API_URL) throw new Error('VITE_API_URL must be configured in the frontend environment.')
+
+const API_BASE = API_URL.replace(/\/+$/, '')
 const SIMULATION_ID_KEY = 'drainmind-simulation-id'
 const SIMULATION_REVISION_KEY = 'drainmind-simulation-revision'
 
