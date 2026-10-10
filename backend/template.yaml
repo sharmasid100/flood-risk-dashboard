@@ -1,3 +1,4 @@
+```yaml
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: DrainMind synthetic flood-risk demo API
@@ -26,23 +27,16 @@ Resources:
         - SNSPublishMessagePolicy:
             TopicName: !GetAtt FloodAlertTopic.TopicName
       Events:
-        Api:
+        ApiRoot:
+          Type: Api
+          Properties:
+            Path: /
+            Method: ANY
+        ApiProxy:
           Type: Api
           Properties:
             Path: /{proxy+}
             Method: ANY
-      Events:
-          ApiRoot:
-            Type: Api
-            Properties:
-              Path: /
-              Method: ANY
-        
-          Api:
-            Type: Api
-            Properties:
-              Path: /{proxy+}
-              Method: ANY
 
   SimulationTable:
     Type: AWS::DynamoDB::Table
@@ -71,3 +65,5 @@ Outputs:
     Value: !Ref SimulationTable
   FloodAlertTopicArn:
     Value: !Ref FloodAlertTopic
+
+```
